@@ -1,5 +1,5 @@
 {
-    "name": "cmi/facebook-sso",
+    "name": "cmi/facebooksso",
     "description": "\"Facebook Single Sign On\"",
     "authors": [
         {
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Cmi\\Facebook-sso\\": "src"
+            "Cmi\\Facebooksso\\": "src"
         }
     }
 }

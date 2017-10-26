@@ -1,4 +1,4 @@
-<?php namespace cmi\facebook-sso;
+<?php namespace cmi\facebooksso;
 
 require('config/fb-config.php');
 
