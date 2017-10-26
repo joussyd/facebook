@@ -1,8 +1,5 @@
 <?php namespace cmi\facebooksso;
 
-require('config/fb-config.php');
-
-
 /**
  * FacebookSignIn class for Sign In on Facebook using cURL
  *
@@ -16,12 +13,12 @@ class FacebookSignIn
      *
      * @return string
      */
-	function GetLoginUrl()
+	function GetLoginUrl($fb_client_id, $fb_redirect_uri, $fb_state)
     {
-		$loginUrl = FACEBOOK_OAUTH_URL
-		. "client_id=" . FACEBOOK_CLIENT_ID
-		. "&redirect_uri=" . FACEBOOK_REDIRECT_URI
-		. "&state=" . FACEBOOK_STATE
+		$loginUrl = 'https://www.facebook.com/v2.10/dialog/oauth?'
+		. "client_id=" . $fb_client_id
+		. "&redirect_uri=" . $fb_redirect_uri
+		. "&state=" . $fb_state
 		. "&response_type=code"
 		. "&scope=public_profile,email"
 		. "&include_granted_scopes=true";
@@ -57,14 +54,14 @@ class FacebookSignIn
      *
      * @return string
      */
-	function GetAccessToken($facebook_code) 
+	function GetAccessToken($fb_code,$fb_client_id, $fb_client_secret, $fb_client_redirect_uri) 
 	{
-		$tokenUrl = FACEBOOK_TOKEN_URL;
+		$tokenUrl = 'https://graph.facebook.com/v2.10/oauth/access_token?';
         $post = array(
-            "code" =>           $facebook_code,
-            "client_id" =>      FACEBOOK_CLIENT_ID,
-            "client_secret" =>  FACEBOOK_CLIENT_SECRET,
-            "redirect_uri" =>   FACEBOOK_REDIRECT_URI,
+            "code" =>           $fb_code,
+            "client_id" =>      $fb_client_id,
+            "client_secret" =>  $fb_client_secret,
+            "redirect_uri" =>   $fb_client_redirect_uri,
             "grant_type" =>     "authorization_code"
         );
 
@@ -73,7 +70,7 @@ class FacebookSignIn
         if ($response) {
             $authObj = json_decode($response);
 
-            return $authObj;
+            return $authObj->access_token;
         } else {
             return null;
         }
@@ -87,7 +84,7 @@ class FacebookSignIn
      */
     function getUserInfo($accessToken)
     {
-        $userInfoUrl = FACEBOOK_USER_INFO_URL . $accessToken;
+        $userInfoUrl = 'https://graph.facebook.com/me?fields=&fields=id,email,cover,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified&access_token=' . $accessToken;
 
         $ch = curl_init();      
         curl_setopt($ch, CURLOPT_URL, $userInfoUrl);        
