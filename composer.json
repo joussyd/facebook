@@ -1,6 +1,6 @@
 {
-    "name": "cmi/facebooksso",
-    "description": "\"Facebook Single Sign On\"",
+    "name": "redscript/facebook",
+    "description": "\"Facebook API\"",
     "authors": [
         {
             "name": "Joussyd Calupig",
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Cmi\\Facebooksso\\": "src"
+            "Redscript\\Facebook\\": "src/"
         }
     }
 }
