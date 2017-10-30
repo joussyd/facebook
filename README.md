@@ -1,2 +1,2 @@
-# facebook-sso
-Facebook Single Sign On
+# facebook
+Facebook API

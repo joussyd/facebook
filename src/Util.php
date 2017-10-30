@@ -2,9 +2,16 @@
 
 namespace Redscript\Facebook;
 
-class Util 
+class Util
 {
-	public function sendRequest($url, $post)
+
+    /**
+     * Send Curl Request
+     *
+     *
+     * @return json
+     */
+	public function SendRequest($url, $post)
 	{
 		$curl = curl_init($url);
         curl_setopt($curl, CURLOPT_POST, true);

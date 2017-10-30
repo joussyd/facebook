@@ -7,17 +7,36 @@ class Base extends Oauth
 
 	const FB_URL = 'https://www.facebook.com/v2.10/dialog/oauth?';
 
-	private $client_id;
-	private $redirect_uri;
-	private $state;
-	private $scope;
+	protected $client_id;
+	protected $redirect_uri;
+	protected $state;
+	protected $scope;
 
 	public function __construct($client_id, $redirect_uri, $state, $scope)
 	{
-		$this->client_id = $client_id;
-		$this->redirect_uri = $redirect_uri;
-		$this->state = $state;
-		$this->scope = $scope;
+		if (isset($client_id)) {
+			$this->client_id = $client_id;
+		}else{
+			throw new Exception('Client id cannot be empty');
+		}
+
+		if (isset($redirect_uri)) {
+			$this->redirect_uri = $redirect_uri;	
+		}else{
+			throw new Exception('Redirect Uri cannot be empty');
+		}
+
+		if (isset($state)) {
+			$this->state = $state;	
+		}else{
+			throw new Exception('State cannot be empty');
+		}
+
+		if (isset($scope)) {
+			$this->scope = $scope;	
+		}else{
+			throw new Exception('Scope cannot be empty');
+		}
 	}
 
 
