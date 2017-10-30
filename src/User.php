@@ -1,8 +1,9 @@
 <?php
 
 namespace Redscript\Facebook;
+use Redscript\Facebook\Util;
 
-class User extends Util
+class User 
 {
 
 	const USER_INFO_URL = 'https://graph.facebook.com/me?fields=&fields=id,email,cover,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified&access_token=';
@@ -14,11 +15,11 @@ class User extends Util
      *
      * @return json
      */
-    public function GetUserInfo($access_token)
+    public function getUserInfo($access_token)
     {
         $url = self::USER_INFO_URL . $access_token;
         $post = '';
 
-        return Util::SendRequest($url,$post);
+        return Util::sendRequest($url,$post);
     }
 }

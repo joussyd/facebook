@@ -1,6 +1,7 @@
 <?php
 
 namespace Redscript\Facebook;
+use Redscript\Facebook\Util;
 
 class Oauth extends User
 {
@@ -12,8 +13,8 @@ class Oauth extends User
      *
      * @return string
      */
-	public function GetAccessToken($fb_code,$fb_client_id, $fb_client_secret, $fb_client_redirect_uri) 
-	{
+	public function getAccessToken($fb_code,$fb_client_id, $fb_client_secret, $fb_client_redirect_uri) 
+	{      
         $post = array(
             "code" =>           $fb_code,
             "client_id" =>      $fb_client_id,
@@ -22,7 +23,7 @@ class Oauth extends User
             "grant_type" =>     "authorization_code"
         );
 
-        $response = Util::SendRequest(self::TOKEN_URL, $post);
+        $response = Util::sendRequest(self::TOKEN_URL, $post);
 
         if ($response) {
             $authObj = json_decode($response);

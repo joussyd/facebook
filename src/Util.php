@@ -11,7 +11,7 @@ class Util
      *
      * @return json
      */
-	public function SendRequest($url, $post)
+	public function sendRequest($url, $post)
 	{
 		$curl = curl_init($url);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -26,4 +26,23 @@ class Util
 
         return $json_response;
 	}
+
+    /**
+     * Generate the Faceboook Login Url
+     *
+     *
+     * @return string
+     */
+    public function generateLoginURL($url, $client_id, $redirect_uri, $state, $scope)
+    {
+        $loginUrl = $url
+        . "client_id=" . $client_id
+        . "&redirect_uri=" . $redirect_uri
+        . "&state=" . $state
+        . "&response_type=code"
+        . "&scope=" . $scope
+        . "&include_granted_scopes=true";
+
+        return $loginUrl;
+    }
 }
