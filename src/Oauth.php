@@ -71,7 +71,7 @@ class Oauth extends Base
     }
 
     /**
-     * Get User's access token
+     * Get Access token
      *
      *
      * @return string
@@ -99,12 +99,10 @@ class Oauth extends Base
                 // return the access token
                 return $response['access_token'];
             } else {
-
                 // if there is no response, return null
                 return null;
             }
         }else{
-
             // if not set, return null
             return null;
         }

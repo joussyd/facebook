@@ -7,7 +7,7 @@ use Redscript\Facebook\Oauth;
 
 class Factory extends Base
 {
-	/**
+     /**
      * Facebook Auth
      *
      *
@@ -26,8 +26,8 @@ class Factory extends Base
      */
 	public function sendRequest($url, $post)
 	{
-		// initiate  request
-		$curl = curl_init($url);
+        // initiate  request
+        $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
@@ -37,14 +37,14 @@ class Factory extends Base
         $response = json_decode(curl_exec($curl), true);
 
         // get the request's return code
-		$http_code = curl_getinfo($curl,CURLINFO_HTTP_CODE);	
+        $http_code = curl_getinfo($curl,CURLINFO_HTTP_CODE);	
 
-		// check if the return code is OK	
-		if($http_code != 200) {
-			die('Error : Failed to receieve response from: ' . $url);	
-		}
+        // check if the return code is OK	
+        if($http_code != 200) {
+            die('Error : Failed to receieve response from: ' . $url);	
+        }
 
-		// close the connection
+        // close the connection
         curl_close($curl);
 
         return $response;
