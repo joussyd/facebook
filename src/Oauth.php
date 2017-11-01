@@ -1,36 +1,123 @@
 <?php
 
 namespace Redscript\Facebook;
-use Redscript\Facebook\Util;
+use Redscript\Facebook\User;
 
-class Oauth extends User
+class Oauth extends Base
 {
+    /* Public Properties
+    -------------------------------*/
+    /* Protected Properties
+    -------------------------------*/
+    /* Private Properties
+    -------------------------------*/
+    /* Get
+    -------------------------------*/
+    /* Magic
+    -------------------------------*/
+    /* Public Methods
+    -------------------------------*/
+    public function __construct($client_id, $client_secret, $redirect_uri, $state, $scope)
+    {
 
-	const TOKEN_URL = 'https://graph.facebook.com/v2.10/oauth/access_token?';
-	/**
+        if (!empty($client_id)) {
+            $this->client_id = $client_id;
+        }else{
+            die('Error: Client id cannot be empty');
+        }
+
+        if (!empty($client_secret)) {
+            $this->client_secret = $client_secret;
+        }else{
+            die('Error: Client secret cannot be empty');
+        }
+
+        if (!empty($redirect_uri)) {
+            $this->redirect_uri = $redirect_uri;    
+        }else{
+            die('Error: Redirect Uri cannot be empty');
+        }
+
+        if (!empty($state)) {
+            $this->state = $state;  
+        }else{
+            die('Error: tate cannot be empty');
+        }
+
+        if (!empty($scope)) {
+            $this->scope = $scope;  
+        }else{
+            die('Error: Scope cannot be empty');
+        }
+    }
+
+    /**
+     * Generate the Faceboook Login Url
+     *
+     *
+     * @return string
+     */
+    public function getLoginURL()
+    {
+        $loginUrl = self::FB_URL
+        . "client_id=" . $this->client_id
+        . "&redirect_uri=" . $this->redirect_uri
+        . "&state=" . $this->state
+        . "&response_type=code"
+        . "&scope=" . $this->scope
+        . "&include_granted_scopes=true";
+
+        return $loginUrl;
+    }
+
+    /**
      * Get User's access token
      *
      *
      * @return string
      */
-	public function getAccessToken($fb_code,$fb_client_id, $fb_client_secret, $fb_client_redirect_uri) 
-	{      
-        $post = array(
-            "code" =>           $fb_code,
-            "client_id" =>      $fb_client_id,
-            "client_secret" =>  $fb_client_secret,
-            "redirect_uri" =>   $fb_client_redirect_uri,
-            "grant_type" =>     "authorization_code"
-        );
+    public function getAccessToken($code) 
+    {
+        // Check if code is set
+        if(isset($code)){
 
-        $response = Util::sendRequest(self::TOKEN_URL, $post);
+            // Create post data array
+            $post = array(
+                "code" =>           $code,
+                "client_id" =>      $this->client_id,
+                "client_secret" =>  $this->client_secret,
+                "redirect_uri" =>   $this->redirect_uri,
+                "grant_type" =>     "authorization_code"
+            );
 
-        if ($response) {
-            $authObj = json_decode($response);
+            // Send request for token
+            $response = Factory::sendRequest(self::TOKEN_URL, $post);
 
-            return $authObj->access_token;
-        } else {
+            // Check if there is a response
+            if ($response) {
+                // If response exist
+                // return the access token
+                return $response['access_token'];
+            } else {
+
+                // if there is no response, return null
+                return null;
+            }
+        }else{
+
+            // if not set, return null
             return null;
         }
-	}
+    }
+
+     /**
+     * Get the User's Info
+     *
+     *
+     * @return array
+     */
+    public function getUserInfo($access_token)
+    {
+        return User::_getUserInfo($access_token);
+    }
 }

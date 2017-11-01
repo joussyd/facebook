@@ -5,92 +5,49 @@ use Redscript\Facebook\Util;
 use Redscript\Facebook\User;
 use Redscript\Facebook\Oauth;
 
-class Factory 
+class Factory extends Base
 {
-
-	const FB_URL = 'https://www.facebook.com/v2.10/dialog/oauth?';
-
-	protected $client_id;
-	protected $redirect_uri;
-	protected $state;
-	protected $scope;
-
-	public function __construct($client_id, $client_secret, $redirect_uri, $state, $scope)
+	/**
+     * Facebook Auth
+     *
+     *
+     * @return Oauth class
+     */
+	public function auth($client_id, $client_secret, $redirect_uri, $state, $scope)
 	{
-		if (!empty($client_id)) {
-			$this->client_id = $client_id;
-		}else{
-			die('Error: Client id cannot be empty');
-		}
-
-		if (!empty($client_secret)) {
-			$this->client_secret = $client_secret;
-		}else{
-			die('Error: Client secret cannot be empty');
-		}
-
-		if (!empty($redirect_uri)) {
-			$this->redirect_uri = $redirect_uri;	
-		}else{
-			die('Error: Redirect Uri cannot be empty');
-		}
-
-		if (!empty($state)) {
-			$this->state = $state;	
-		}else{
-			die('Error: tate cannot be empty');
-		}
-
-		if (!empty($scope)) {
-			$this->scope = $scope;	
-		}else{
-			die('Error: Scope cannot be empty');
-		}
+		return new Oauth($client_id, $client_secret, $redirect_uri, $state, $scope);
 	}
 
-
-	/**
-     * Get Access token
+     /**
+     * Send Curl Request
      *
      *
-     * @return string
+     * @return json
      */
-    public function getAccessToken($code)
-    {
-    	return Oauth::getAccessToken( 
-    		$code, 
-    		$this->client_id, 
-    		$this->client_secret, 
-    		$this->redirect_uri
-    	);
-    }
+	public function sendRequest($url, $post)
+	{
+		// initiate  request
+		$curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
+        $response = json_decode(curl_exec($curl), true);
 
+        // get the request's return code
+		$http_code = curl_getinfo($curl,CURLINFO_HTTP_CODE);	
 
-	/**
-     * Generate the Faceboook Login Url
-     *
-     *
-     * @return string
-     */
-	public function getLoginURL()
-    {
-		$loginUrl = Util::generateLoginURL(self::FB_URL, $this->client_id, $this->redirect_uri, 
-			$this->state, $this->scope);
+		// check if the return code is OK	
+		if($http_code != 200) {
+			die('Error : Failed to receieve response from: ' . $url);	
+		}
 
-		return $loginUrl;
-    }
+		// close the connection
+        curl_close($curl);
 
-    /**
-     * Get the User's Info
-     *
-     *
-     * @return array
-     */
-    public function getUserInfo($access_token)
-    {
-    	return User::getUserInfo($access_token);
-    }
-
+        return $response;
+	}
 
 }
