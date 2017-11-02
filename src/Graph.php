@@ -33,7 +33,8 @@ class Graph extends Factory
     /**
     * Graph constructor
     *
-    * @param  string $accessToken Access Token
+    * @param  string $access  Token Access Token
+    * @param  array  $fields  Fields
     * @return Auth class
     */
     public function __construct($accessToken, $fields)
@@ -69,7 +70,7 @@ class Graph extends Factory
         // Check if access token is set
         if(isset($this->accessToken)){
             // facebook graph url
-            $url = self::GRAPH . '/me?fields=' . $this->fields .  '&access_token=' . $this->accessToken;
+            $url = self::GRAPH . '/me?fields=' . implode(',', $this->fields) .  '&access_token=' . $this->accessToken;
             $post = '';
 
             //return response from the request
