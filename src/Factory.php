@@ -1,31 +1,111 @@
 <?php
-
+/**
+ * This file is part of the Compos Mentis Inc.
+ * PHP version 7+ (c) 2017 CMI
+ *
+ * Copyright and license information can be found at LICENSE
+ * distributed with this package.
+ *
+ * @category Class
+ * @package  Class
+ * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://joussydmcalupig.com
+ */
 namespace Redscript\Facebook;
-use Redscript\Facebook\Util;
-use Redscript\Facebook\User;
-use Redscript\Facebook\Oauth;
+use Redscript\Facebook\Auth;
+use Redscript\Facebook\Graph;
 
+/**
+ * Factory Class
+ *
+ * PHP version 7+
+ *
+ * @category Factory
+ * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://joussydmcalupig.com
+ */
 class Factory extends Base
 {
-     /**
-     * Facebook Auth
-     *
-     *
-     * @return Oauth class
-     */
-	public function auth($client_id, $client_secret, $redirect_uri, $state, $scope)
-	{
-		return new Oauth($client_id, $client_secret, $redirect_uri, $state, $scope);
-	}
+    /* Constants
+    -------------------------------*/
+    const GRAPH = 'https://graph.facebook.com';
+    /* Protected Properties
+    -------------------------------*/
+    /*
+    *
+    * @var string
+    */
+    protected $clientId = NULL;
 
-     /**
-     * Send Curl Request
-     *
-     *
-     * @return json
-     */
-	public function sendRequest($url, $post)
-	{
+    /*
+    *
+    * @var string
+    */
+    protected $redirectUri = NULL;
+
+    /*
+    *
+    * @var string
+    */
+    protected $state = NULL;
+
+    /*
+    *
+    * @var string
+    */
+    protected $scope = NULL;
+
+    /*
+    *
+    * @var string
+    */
+    protected $accessToken = NULL;
+
+    /*
+    *
+    * @var string
+    */
+    protected $fields = NULL;
+
+    /* Public Methods 
+    -------------------------------*/
+
+    /**
+    * Facebook Authentication
+    *
+    * @param  string $client_id      Client ID
+    * @param  string $client_secret  Client Secret
+    * @param  string $redirect_uri   Redirect URL
+    * @param  string $state          State
+    * @param  string $scope          Scope
+    * @return Auth class
+    */
+    public function auth($clientId, $clientSecret, $redirectUri, $state, $scope)
+    {
+        return new Auth($clientId, $clientSecret, $redirectUri, $state, $scope);
+    }
+
+    /**
+    * Facebook Graph
+    *
+    * @return Graph class
+    */
+    public function graph($accessToken, $fields)
+    {
+        return new Graph($accessToken, $fields);
+    }
+
+    /**
+    * Send Curl Request
+    *
+    * @param  string $url   URL
+    * @param  array  $post  Request's post data
+    * @return json
+    */
+    protected function sendRequest($url, $post)
+    {
         // initiate  request
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -41,13 +121,15 @@ class Factory extends Base
 
         // check if the return code is OK	
         if($http_code != 200) {
+            print_r($response);
             die('Error : Failed to receieve response from: ' . $url);	
         }
 
         // close the connection
         curl_close($curl);
 
+        // return response
         return $response;
-	}
+    }
 
 }

@@ -1,36 +1,33 @@
 <?php
-
+/**
+ * This file is part of the Compos Mentis Inc.
+ * PHP version 7+ (c) 2017 CMI
+ *
+ * Copyright and license information can be found at LICENSE
+ * distributed with this package.
+ *
+ * @category Class
+ * @package  Class
+ * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://joussydmcalupig.com
+ */
 namespace Redscript\Facebook;
 use Redscript\Facebook\Factory;
 
+
+/**
+ * Base Class
+ *
+ * PHP version 7+
+ *
+ * @category Class
+ * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://joussydmcalupig.com
+ */
 class Base 
 {
-	/* Constants
-    -------------------------------*/
-	const FB_GRAPH      = 'https://graph.facebook.com';
-	const FB_URL        = self::HOST . '/v2.10/dialog/oauth?';
-	const HOST          = 'https://www.facebook.com';
-	const TOKEN_URL     = self::FB_GRAPH . '/' . self::VERSION .'/oauth/access_token?';
-	const USER_INFO_URL = self::FB_GRAPH . '/me?fields=&fields=id,email,cover,name,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified&access_token=';
-	const VERSION       = 'v2.10';
-
-	/* Public Properties
-    -------------------------------*/
-    /* Protected Properties
-    -------------------------------*/
-	protected $client_id;
-	protected $redirect_uri;
-	protected $state;
-	protected $scope;
-	
-    /* Private Properties
-    -------------------------------*/
-    /* Get
-    -------------------------------*/
-    /* Magic
-    -------------------------------*/
-    /* Public Methods
-    -------------------------------*/
-    /* Protected Methods
+    /* Constants
     -------------------------------*/
 }
