@@ -30,8 +30,11 @@ class Auth extends Factory
     /* Constants
     -------------------------------*/
     const HOST          = 'https://www.facebook.com';
+    const GRANTED_SCOPE = true;
+    const GRANT_TYPE    = 'authorization_code';
     const REQUEST_AUTH  = '/dialog/oauth';
     const REQUEST_TOKEN = '/oauth/access_token?';
+    const RESPONSE_TYPE = 'code';
     const VERSION       = 'v2.10';
 
     /* Public Methods
@@ -49,46 +52,11 @@ class Auth extends Factory
     */
     public function __construct($clientId, $clientSecret, $redirectUri, $state, $scope)
     {
-        // Check if client id is not empty
-        if (!empty($clientId)) {
-            // assign client id as protected property
-            $this->clientId = $clientId;
-        }else{
-            // if empty, return error
-            die('Error: Client id cannot be empty');
-        }
-        // Check if the client secret is not empty
-        if (!empty($clientSecret)) {
-            // assign client secret as protected property
+            $this->clientId     = $clientId;
             $this->clientSecret = $clientSecret;
-        }else{
-            // if empty, return error
-            die('Error: Client secret cannot be empty');
-        }
-        // Check if the redirect uri is not empty
-        if (!empty($redirectUri)) {
-            //assign redirect uri as protected property
-            $this->redirectUri = $redirectUri;    
-        }else{
-            // if empty, return error
-            die('Error: Redirect Uri cannot be empty');
-        }
-        // Check is the state is empty
-        if (!empty($state)) {
-            // assign state as protected property
-            $this->state = $state;  
-        }else{
-            // if empty, return error
-            die('Error: tate cannot be empty');
-        }
-        // Check if the scope is empty
-        if (!empty($scope)) {
-            // assign scope as protected property
-            $this->scope = $scope;  
-        }else{
-            // if empty, return error
-            die('Error: Scope cannot be empty');
-        }
+            $this->redirectUri  = $redirectUri;    
+            $this->state        = $state;  
+            $this->scope        = $scope;  
     }
 
     /**
@@ -99,14 +67,21 @@ class Auth extends Factory
      */
     public function getLoginURL()
     {
-        // build login url
-        $loginUrl = self::HOST . '/' . self::VERSION . self::REQUEST_AUTH
-        . "?client_id=" . $this->clientId
-        . "&redirect_uri=" . $this->redirectUri
-        . "&state=" . $this->state
-        . "&response_type=code"
-        . "&scope=" . $this->scope
-        . "&include_granted_scopes=true";
+        // build url
+        $url = self::HOST . '/' . self::VERSION . self::REQUEST_AUTH;
+
+        // build query parameters
+        $params = array(
+            'client_id'              => $this->clientId,
+            'redirect_uri'           => $this->redirectUri,
+            'state'                  => $this->state,
+            'response_type'          => self::RESPONSE_TYPE,
+            'scope'                  => $this->scope,
+            'include_granted_scopes' => self::GRANTED_SCOPE
+        );
+
+        // append query parameters in the url
+        $loginUrl = $url . '?' . http_build_query($params);
 
         // return login url
         return $loginUrl;
@@ -120,36 +95,35 @@ class Auth extends Factory
      */
     public function getAccessToken($code) 
     {
-        // Check if code is set
-        if(isset($code)){
+        // Check if code is not set
+        if(!isset($code)){
+            // if true, let's throw some error
+            throw new Exception("Error: Code not set");
+        }
 
-            // Create post data array
-            $post = array(
-                "code"          =>  $code,
-                "client_id"     =>  $this->clientId,
-                "client_secret" =>  $this->clientSecret,
-                "redirect_uri"  =>  $this->redirectUri,
-                "grant_type"    =>  "authorization_code"
-            );
+        //create post data array
+        $post = array(
+            "code"          =>  $code,
+            "client_id"     =>  $this->clientId,
+            "client_secret" =>  $this->clientSecret,
+            "redirect_uri"  =>  $this->redirectUri,
+            "grant_type"    =>  self::GRANT_TYPE
+        );
 
-            // Create URL
-            $url = self::GRAPH . '/' . self::VERSION . self::REQUEST_TOKEN;
+        // Create URL
+        $url = self::GRAPH . '/' . self::VERSION . self::REQUEST_TOKEN;
 
-            // Send request for token
-            $response = Factory::sendRequest($url, $post);
+        // Send request for token
+        $response = Factory::sendRequest($url, $post);
 
-            // Check if there is a response
-            if ($response) {
-                // If response exist
-                // return the access token
-                return $response['access_token'];
-            } else {
-                // if there is no response, return null
-                return null;
-            }
-        }else{
-            // if not set, return null
-            return null;
+        // Check if there is a response
+        if ($response) {
+            // If response exist
+            // return the access token
+            return $response['access_token'];
+        } else {
+            // if there is no response, return null
+            throw new Exception("Error: Failed to retrieve access token");
         }
     }
 }

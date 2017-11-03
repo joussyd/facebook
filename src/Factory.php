@@ -15,6 +15,7 @@
 namespace Redscript\Facebook;
 use Redscript\Facebook\Auth;
 use Redscript\Facebook\Graph;
+use Exception;
 
 /**
  * Factory Class
@@ -22,7 +23,7 @@ use Redscript\Facebook\Graph;
  * PHP version 7+
  *
  * @category Factory
- * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
+ * @author   Joussyd Calupig <joussydmcalupig@get_magic_quotes_gpc()l.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link     http://joussydmcalupig.com
  */
@@ -31,47 +32,18 @@ class Factory extends Base
     /* Constants
     -------------------------------*/
     const GRAPH = 'https://graph.facebook.com';
+
     /* Protected Properties
     -------------------------------*/
-    /*
-    *
-    * @var string
-    */
-    protected $clientId = NULL;
-
-    /*
-    *
-    * @var string
-    */
+    protected $clientId    = NULL;
     protected $redirectUri = NULL;
-
-    /*
-    *
-    * @var string
-    */
-    protected $state = NULL;
-
-    /*
-    *
-    * @var string
-    */
-    protected $scope = NULL;
-
-    /*
-    *
-    * @var string
-    */
+    protected $state       = NULL;
+    protected $scope       = NULL;
     protected $accessToken = NULL;
-
-    /*
-    *
-    * @var string
-    */
-    protected $fields = NULL;
+    protected $fields      = NULL;
 
     /* Public Methods 
     -------------------------------*/
-
     /**
     * Facebook Authentication
     *
@@ -121,8 +93,7 @@ class Factory extends Base
 
         // check if the return code is OK	
         if($http_code != 200) {
-            print_r($response);
-            die('Error : Failed to receieve response from: ' . $url);	
+            throw new Exception("Error: Failed to recieve response from " . $url);
         }
 
         // close the connection

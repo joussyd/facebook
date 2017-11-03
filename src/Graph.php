@@ -39,23 +39,8 @@ class Graph extends Factory
     */
     public function __construct($accessToken, $fields)
     {
-        // Check if the fields is empty
-        if (!empty($accessToken)) {     
-            // assign access token as protected property
-            $this->accessToken = $accessToken; 
-        }else{
-            // if empty, return error
-            die('Error: Access Token cannot be empty');
-        }
-
-        // Check if the fields is empty
-        if (!empty($fields)) {     
-            // assign fields as protected property
-            $this->fields = $fields; 
-        }else{
-            // if empty, return error
-            die('Error: fields cannot be empty');
-        }
+        $this->accessToken = $accessToken;
+        $this->fields = $fields;
     }
 
 	/**
@@ -66,18 +51,15 @@ class Graph extends Factory
      */
     public function getProfile()
     {
-
-        // Check if access token is set
-        if(isset($this->accessToken)){
-            // facebook graph url
-            $url = self::GRAPH . '/me?fields=' . implode(',', $this->fields) .  '&access_token=' . $this->accessToken;
-            $post = '';
-
-            //return response from the request
-            return Factory::sendRequest($url, $post);
-        }else{
-            // if not set, return error
-            die('Error: No Access Token provided');
+        // Check if access token is not set
+        if(!isset($this->accessToken)){     
+            throw new Exception("Error: Access token not set");
         }
+        
+        // facebook graph url
+        $url = self::GRAPH . '/me?fields=' . implode(',', $this->fields) .  '&access_token=' . $this->accessToken;
+        $post = '';
+        //return response from the request
+        return Factory::sendRequest($url, $post);
     }
 }
