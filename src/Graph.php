@@ -60,6 +60,6 @@ class Graph extends Factory
         $url = self::GRAPH . '/me?fields=' . implode(',', $this->fields) .  '&access_token=' . $this->accessToken;
         $post = '';
         //return response from the request
-        return Factory::sendRequest($url, $post);
+        return $this->sendRequest($url, $post);
     }
 }

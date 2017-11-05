@@ -114,7 +114,7 @@ class Auth extends Factory
         $url = self::GRAPH . '/' . self::VERSION . self::REQUEST_TOKEN;
 
         // Send request for token
-        $response = Factory::sendRequest($url, $post);
+        $response = $this->sendRequest($url, $post);
 
         // Check if there is a response
         if ($response) {
