@@ -10,7 +10,6 @@
  * @package  Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 namespace Redscript\Facebook;
 use Redscript\Facebook\Factory;
@@ -24,7 +23,6 @@ use Redscript\Facebook\Factory;
  * @category Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 class Base 
 {

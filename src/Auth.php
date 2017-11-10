@@ -10,7 +10,6 @@
  * @package  Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 namespace Redscript\Facebook;
 
@@ -22,16 +21,15 @@ namespace Redscript\Facebook;
  * @category Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 class Auth extends Factory
 {
 
     /* Constants
     -------------------------------*/
-    const HOST          = 'https://www.facebook.com';
     const GRANTED_SCOPE = true;
     const GRANT_TYPE    = 'authorization_code';
+    const HOST          = 'https://www.facebook.com';
     const REQUEST_AUTH  = '/dialog/oauth';
     const REQUEST_TOKEN = '/oauth/access_token?';
     const RESPONSE_TYPE = 'code';
@@ -45,18 +43,17 @@ class Auth extends Factory
     * @param  string $clientId      Client ID
     * @param  string $clientSecret  Client Secret
     * @param  string $redirectUri   Redirect URL
-    * @param  string $state         State
     * @param  string $scope         Scope
-    * @param  string $fields        Fields
+    * @param  string $state         State
     * @return Auth class
     */
     public function __construct($clientId, $clientSecret, $redirectUri, $state, $scope)
     {
-            $this->clientId     = $clientId;
-            $this->clientSecret = $clientSecret;
-            $this->redirectUri  = $redirectUri;    
-            $this->state        = $state;  
-            $this->scope        = $scope;  
+        $this->clientId     = $clientId;
+        $this->clientSecret = $clientSecret;
+        $this->redirectUri  = $redirectUri;
+        $this->state        = $state;
+        $this->scope        = $scope; 
     }
 
     /**
@@ -98,32 +95,30 @@ class Auth extends Factory
         // Check if code is not set
         if(!isset($code)){
             // if true, let's throw some error
-            throw new Exception("Error: Code not set");
+            throw new Exception('Error: Code not set');
         }
 
         //create post data array
         $post = array(
-            "code"          =>  $code,
-            "client_id"     =>  $this->clientId,
-            "client_secret" =>  $this->clientSecret,
-            "redirect_uri"  =>  $this->redirectUri,
-            "grant_type"    =>  self::GRANT_TYPE
+            'code'          =>  $code,
+            'client_id'     =>  $this->clientId,
+            'client_secret' =>  $this->clientSecret,
+            'redirect_uri'  =>  $this->redirectUri,
+            'grant_type'    =>  self::GRANT_TYPE
         );
 
         // Create URL
         $url = self::GRAPH . '/' . self::VERSION . self::REQUEST_TOKEN;
-
+        
         // Send request for token
         $response = $this->sendRequest($url, $post);
 
-        // Check if there is a response
-        if ($response) {
-            // If response exist
-            // return the access token
-            return $response['access_token'];
-        } else {
-            // if there is no response, return null
-            throw new Exception("Error: Failed to retrieve access token");
+        // Check if there is no response
+        if(!$response) {
+            throw new Exception('Error: Failed to retrieve access token');
         }
+
+        // return the access token
+        return $response['access_token'];
     }
 }

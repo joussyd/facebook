@@ -10,7 +10,6 @@
  * @package  Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 namespace Redscript\Facebook;
 use Redscript\Facebook\Auth;
@@ -23,9 +22,8 @@ use Exception;
  * PHP version 7+
  *
  * @category Factory
- * @author   Joussyd Calupig <joussydmcalupig@get_magic_quotes_gpc()l.com>
+ * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 class Factory extends Base
 {
@@ -35,12 +33,12 @@ class Factory extends Base
 
     /* Protected Properties
     -------------------------------*/
-    protected $clientId    = NULL;
-    protected $redirectUri = NULL;
-    protected $state       = NULL;
-    protected $scope       = NULL;
     protected $accessToken = NULL;
+    protected $clientId    = NULL;
     protected $fields      = NULL;
+    protected $redirectUri = NULL;
+    protected $scope       = NULL;
+    protected $state       = NULL;
 
     /* Public Methods 
     -------------------------------*/
@@ -50,8 +48,8 @@ class Factory extends Base
     * @param  string $client_id      Client ID
     * @param  string $client_secret  Client Secret
     * @param  string $redirect_uri   Redirect URL
-    * @param  string $state          State
     * @param  string $scope          Scope
+    * @param  string $state          State
     * @return Auth class
     */
     public function auth($clientId, $clientSecret, $redirectUri, $state, $scope)
@@ -76,24 +74,30 @@ class Factory extends Base
     * @param  array  $post  Request's post data
     * @return json
     */
-    protected function sendRequest($url, $post)
+    protected function sendRequest($url, $post = array())
     {
         // initiate  request
         $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
+        // check if post is set
+        if(!empty($post)) {
+            // add post data to the equest
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+        }
+
+        // decode curl response to json
         $response = json_decode(curl_exec($curl), true);
 
         // get the request's return code
-        $http_code = curl_getinfo($curl,CURLINFO_HTTP_CODE);	
+        $http_code = curl_getinfo($curl,CURLINFO_HTTP_CODE);
 
-        // check if the return code is OK	
+        // check if the return code is OK
         if($http_code != 200) {
-            throw new Exception("Error: Failed to recieve response from " . $url);
+            throw new Exception('Error: Failed to recieve response from ' . $url);
         }
 
         // close the connection

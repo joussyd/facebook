@@ -10,7 +10,6 @@
  * @package  Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 namespace Redscript\Facebook;
 
@@ -22,10 +21,10 @@ namespace Redscript\Facebook;
  * @category Class
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link     http://joussydmcalupig.com
  */
 class Graph extends Factory
 {
+
     /* Constants
     -------------------------------*/
     /* Public Methods
@@ -40,26 +39,28 @@ class Graph extends Factory
     public function __construct($accessToken, $fields)
     {
         $this->accessToken = $accessToken;
-        $this->fields = $fields;
+        $this->fields      = $fields;
     }
 
-	/**
+    /**
      * Get User Profile
      *
-     * @param  string $accessToken Facebook Access Token
      * @return json
      */
     public function getProfile()
     {
         // Check if access token is not set
-        if(!isset($this->accessToken)){     
+        if(!isset($this->accessToken)){
             throw new Exception("Error: Access token not set");
         }
+
+        $query = array(
+            'fields'        => implode(',', $this->fields),
+            'access_token'  => $this->accessToken);
+
+        $url = self::GRAPH . '/me?' . http_build_query($query);
         
-        // facebook graph url
-        $url = self::GRAPH . '/me?fields=' . implode(',', $this->fields) .  '&access_token=' . $this->accessToken;
-        $post = '';
         //return response from the request
-        return $this->sendRequest($url, $post);
+        return $this->sendRequest($url);
     }
 }
