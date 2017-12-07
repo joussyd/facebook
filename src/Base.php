@@ -11,8 +11,8 @@
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
-namespace Redscript\Facebook;
-use Redscript\Facebook\Factory;
+namespace Lethia\Facebook;
+use Lethia\Facebook\Factory;
 
 
 /**

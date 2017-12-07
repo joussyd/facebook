@@ -11,9 +11,9 @@
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
-namespace Redscript\Facebook;
-use Redscript\Facebook\Auth;
-use Redscript\Facebook\Graph;
+namespace Lethia\Facebook;
+use Lethia\Facebook\Auth;
+use Lethia\Facebook\Graph;
 use Exception;
 
 /**
@@ -106,5 +106,4 @@ class Factory extends Base
         // return response
         return $response;
     }
-
 }

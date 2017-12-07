@@ -11,7 +11,7 @@
  * @author   Joussyd Calupig <joussydmcalupig@gmail.com>
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
-namespace Redscript\Facebook;
+namespace Lethia\Facebook;
 
 /**
  * Authentication Class

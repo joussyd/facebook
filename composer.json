@@ -1,5 +1,5 @@
 {
-    "name": "redscript/facebook",
+    "name": "lethia/facebook",
     "description": "\"Facebook API\"",
     "authors": [
         {
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Redscript\\Facebook\\": "src/"
+            "Lethia\\Facebook\\": "src/"
         }
     }
 }
